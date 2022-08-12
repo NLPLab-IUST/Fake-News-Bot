@@ -53,7 +53,7 @@ pip install -r requirements.txt
 
 In the next step you should open bot.py file and copy your bot's token which is given by **botfather** to the Token in line 10.
 
-Now you are ready to run the bot.py file. **Remember that if you IP address is from iran, you need to turn on your VPN.**
+Now you are ready to run the bot.py file. **Remember that if your IP address is from iran, you need to turn on your VPN.**
 
 #### **Note: you can run this code on colab by copying the code inside bot.py.**
 

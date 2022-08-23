@@ -278,7 +278,7 @@ def text_message(update, context):
         elif image in update.message.text:
             pending_search_image(update, context)
         else:
-            update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
+            update.message.reply_text(LANGUAGE.UKNOWN_COMMAND)
 
     else:
         print("else")

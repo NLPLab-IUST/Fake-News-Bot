@@ -14,6 +14,7 @@ class EN:
     /image_search: The first 5 searched links related to the sent image
     '''
     ERROR = "error"
+    UKNOWN_COMMAND = "🔴 Uknown command!"
     TYPE_START_FIRST = "please type /start first!"
     ATHEISM = "Atheism"
     CLIMATE_CHANGE_CONCERN = "Climate Change Concern"
@@ -51,6 +52,7 @@ class FA:
     /image_search: پنج لینک اول جستجو شده مربوط به تصویر ارسال شده 
     '''
     ERROR = "خطا"
+    UKNOWN_COMMAND = "🔴 دستور ناشناخته!"
     TYPE_START_FIRST = "لطفا ابتدا /start را تایپ کنید"
     ATHEISM = "کفر"
     CLIMATE_CHANGE_CONCERN = "نگرانی تغییرات آب و هوا"

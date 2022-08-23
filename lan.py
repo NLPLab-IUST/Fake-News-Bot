@@ -5,12 +5,13 @@ class EN:
     IMAGE = "Search Image"
     BOT_LANGUAGE = "Bot Language"
     WELCOME = "Welcome to my bot!\nTODO: Write something to describe out bot functionality."
+    STOP_BOT = "Thanks for using our bot\n GoodBye 👋"
     ABOUT = "The purpose of this bot is to check the truthness of the combination of a text and an image from social media, thus it takes a text and an image as inputs, then it passes this inputs to our fact checking model. The output of this bot is a percentage that indicates the possibility that this corresponding news is fake."
     HELP = '''
-    Commands:\n
-    🔴 to start the bot and see the menu type /start \n
-    🔴 for changing the language of bot type /bot_language\n
-    🔴 type /about to learn about the bot and it's purpose\n
+    Functionality:\n
+    /stance: The detection of the stance of the sent text in relation to the target has been determined\n
+    /text_search: The first 5 searched links related to the sent text\n
+    /image_search: The first 5 searched links related to the sent image
     '''
     ERROR = "error"
     TYPE_START_FIRST = "please type /start first!"
@@ -41,15 +42,16 @@ class FA:
     IMAGE = "جست و جوی تصویر"
     BOT_LANGUAGE = "زبان بات"
     WELCOME = "به ربات من خوش آمدید!\n TODO: چیزی برای توصیف عملکرد ربات بنویسید."
+    STOP_BOT = "تشکر بابت استفاده از بات تلگرامی ما\nخدانگهدار 👋"
     ABOUT = "هدف این ربات بررسی صحت ترکیب یک متن و یک تصویر از رسانه های اجتماعی است، بنابراین یک متن و یک تصویر را به عنوان ورودی می گیرد، سپس این ورودی ها را به مدل بررسی واقعیت ما ارسال می کند. خروجی این ربات درصدی است که نشان دهنده احتمال جعلی بودن این خبر مربوطه است."
     HELP = '''
-    دستور ها:\n
-    🔴 برای شروع بات /start را تایپ کنید\n
-    🔴 برای تغییر زبان بات /bot_language را تایپ کنید \n
-    🔴 برای آشنایی با بات و هدف آن /about را تایپ کنید\n
+    کارکردها:
+    /stance: تشخیص موضع متن ارسالی نسبت به موضوع تعیین شده \n
+    /text_search: پنج لینک اول جستجو شده مربوط به متن ارسال شده \n
+    /image_search: پنج لینک اول جستجو شده مربوط به تصویر ارسال شده 
     '''
     ERROR = "خطا"
-    TYPE_START_FIRST = "را تایپ کنید \start لطفا ابتدا"
+    TYPE_START_FIRST = "لطفا ابتدا /start را تایپ کنید"
     ATHEISM = "کفر"
     CLIMATE_CHANGE_CONCERN = "نگرانی تغییرات آب و هوا"
     DONALD_TRUMP = "دونالد ترامپ"
@@ -71,8 +73,15 @@ class FA:
     CHOOSE_LANGUAGE = "زبان بات را انتخاب کنید ..."
 
 class Language:
+    IRAN_FLAG = "🇮🇷"
+    ENGLAND_FLAG = "🇬🇧"
+    IRAN_EN = 'Farsi' + IRAN_FLAG
+    IRAN_FA =  'فارسی' + IRAN_FLAG
+    ENGLAND_EN = 'English' + ENGLAND_FLAG
+    ENGLAND_FA =  'انگلیسی' + ENGLAND_FLAG
+    LANGUAGES = [IRAN_EN, IRAN_FA, ENGLAND_EN, ENGLAND_FA]
     LANGUAGE_SELECTOR = {
-        'farsi': FA, 'فارسی': FA,
-        'english': EN, 'انگلیسی': EN
+        IRAN_EN: FA, IRAN_FA: FA,
+        ENGLAND_EN: EN, ENGLAND_FA: EN
     }
     BOT_LANGUAGE = [EN.BOT_LANGUAGE, FA.BOT_LANGUAGE]

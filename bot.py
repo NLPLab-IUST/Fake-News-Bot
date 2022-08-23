@@ -3,11 +3,7 @@ from googlesearch import search
 import logging
 import os
 from telegram.ext import *
-from unittest import result
-import requests
 from telegram import *
-import time
-import requests, json
 import pyimgur
 from serpapi import GoogleSearch
 from lan import Language, EN, FA
@@ -48,10 +44,15 @@ def start(update: Update, context: CallbackContext):
     if len(last_message) != 0:
         context.bot.delete_message(chat_id=update.effective_chat.id, message_id=last_message[0].message_id)
     buttons = [[KeyboardButton(stance)], [KeyboardButton(text)], [KeyboardButton(image)], [KeyboardButton(language)]]
-    
+    user_id = update.message.chat.id
+    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
     last_message[0] = context.bot.send_message(chat_id=update.effective_chat.id,
                              reply_markup=ReplyKeyboardMarkup(buttons), text=LANGUAGE.WELCOME)
 
+def stop(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
+    user_state[user_id] = {"role" : None, "state" : "stop", "target" : None, "text" : None}
+    context.bot.send_message(chat_id=update.effective_chat.id, text = LANGUAGE.STOP_BOT)
 
 def about(update, context):
     text = LANGUAGE.ABOUT
@@ -214,21 +215,48 @@ def api_test(stance_target, stance_text):
 
 def pending_stance_detection(update: Update, context: CallbackContext):
     user_id = update.message.chat.id
-    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
-    user_state[user_id]["role"] = "stance_detection"
-    api_pipline(update, context, "stage0")
+    if user_id in user_state and user_state[user_id]["state"] != "stop":
+        user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+        user_state[user_id]["role"] = "stance_detection"
+        api_pipline(update, context, "stage0")
+    else:
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
 def pending_search_text(update: Update, context: CallbackContext):
     user_id = update.message.chat.id
-    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
-    user_state[user_id]["role"] = "text"
-    update.message.reply_text(LANGUAGE.SEND_TEXT)
+    if user_id in user_state and user_state[user_id]["state"] != "stop":
+        user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+        user_state[user_id]["role"] = "text"
+        update.message.reply_text(LANGUAGE.SEND_TEXT)
+    else:
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
 def pending_search_image(update: Update, context: CallbackContext):
     user_id = update.message.chat.id
+    if user_id in user_state and user_state[user_id]["state"] != "stop":
+        user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+        user_state[user_id]["role"] = "image"
+        update.message.reply_text(LANGUAGE.SEND_IMAGE)
+    else:
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
+
+def pending_bot_language(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
     user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
-    user_state[user_id]["role"] = "image"
-    update.message.reply_text(LANGUAGE.SEND_IMAGE)
+    user_state[user_id]["role"] = "change_language"
+    buttons = [[KeyboardButton(LANGUAGE.FARSI + Language.IRAN_FLAG)], [KeyboardButton(LANGUAGE.ENGLISH + Language.ENGLAND_FLAG)]]
+    context.bot.send_message(chat_id=update._effective_chat.id, text=LANGUAGE.CHOOSE_LANGUAGE, reply_markup=ReplyKeyboardMarkup(buttons, resize_keyboard=True))
+
+def change_language(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
+    if user_state[user_id]["role"] == "change_language":
+        global LANGUAGE
+        choosen_language = update.message.text
+        print(choosen_language)
+        LANGUAGE = Language.LANGUAGE_SELECTOR[choosen_language]
+        user_state[user_id]["role"] = None
+        assign_global_value()
+        start(update, context)
 
 def text_message(update, context):
     user_id = update.message.chat.id
@@ -236,7 +264,10 @@ def text_message(update, context):
     print("here in text message")
     print("update.message.text : ", update.message.text)
 
-    if user_id not in user_state or user_state[user_id]["role"] == None:
+    if user_id in user_state and user_state[user_id]["state"] == "stop":
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
+
+    elif user_id not in user_state or user_state[user_id]["role"] == None:
         print("if")
         button_list = [stance, text, image]
         user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
@@ -270,17 +301,6 @@ def text_message(update, context):
                 api_pipline(update, context, "stage0")
                 user_state[user_id].append("stage1")
 
-def bot_language(update: Update, context: CallbackContext):
-    buttons = [[InlineKeyboardButton(LANGUAGE.FARSI, callback_data='farsi')], [InlineKeyboardButton(LANGUAGE.ENGLISH, callback_data='english')]]
-    context.bot.send_message(chat_id=update._effective_chat.id, text=LANGUAGE.CHOOSE_LANGUAGE, reply_markup=InlineKeyboardMarkup(buttons, resize_keyboard=True))
-
-def change_language(update: Update, context: CallbackContext):
-    global LANGUAGE
-    callback_data = update.callback_query.data
-    if 'farsi' in callback_data or 'english' in callback_data:
-        LANGUAGE = Language.LANGUAGE_SELECTOR[callback_data]
-        assign_global_value()
-        start(update, context)
 
 
 def main():
@@ -288,34 +308,31 @@ def main():
     dp = updater.dispatcher
 
     start_command = BotCommand('start', 'Start the bot')
-    #stop_command = ...
-    # help_command = BotCommand('help', 'Show bot commands')
+    stop_command = BotCommand('stop', 'Stop the bot')
     about_command = BotCommand('about', 'Summary of the purpose of the bot')
+    help_command = BotCommand('help', 'Description of commands')
     language_command = BotCommand('bot_language', 'Change the language of the bot')
     stance_command = BotCommand('stance', 'Stance Detection')
     image_command = BotCommand('image_search', 'Search Image')
     text_command = BotCommand('text_search', 'Search Text')
-    bot_commands = [start_command, about_command, language_command,\
-            stance_command, image_command, text_command,\
-                # stop_command, help_command, 
-                ]
+    bot_commands = [start_command, stop_command, about_command, help_command,\
+                    language_command, stance_command, text_command, image_command]
     dp.bot.set_my_commands(bot_commands)
 
     dp.add_handler(CommandHandler("start", start))
-    # dp.add_handler(CommandHandler("stop", stop))
-    # dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("stop", stop))
     dp.add_handler(CommandHandler("about", about))
+    dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("stance", pending_stance_detection))
-    dp.add_handler(CommandHandler('bot_language', bot_language))
+    dp.add_handler(CommandHandler('bot_language', pending_bot_language))
     dp.add_handler(CommandHandler('text_search', pending_search_text))
     dp.add_handler(CommandHandler('image_search', pending_search_image))
 
-    dp.add_handler(MessageHandler(Filters.text(Language.BOT_LANGUAGE), bot_language))
+    dp.add_handler(MessageHandler(Filters.text(Language.BOT_LANGUAGE), pending_bot_language))
+    dp.add_handler(MessageHandler(Filters.text(Language.LANGUAGES), change_language))
     dp.add_handler(MessageHandler(Filters.text, text_message))
     dp.add_handler(MessageHandler(Filters.document, downloadImageDoc))
     dp.add_handler(MessageHandler(Filters.photo, downloadImagePhoto))
-
-    dp.add_handler(CallbackQueryHandler(change_language, pattern='^(farsi|english|فارسی|انگلیسی)$'))
 
     dp.add_error_handler(error)
 

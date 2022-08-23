@@ -16,8 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-# TOKEN = env.str("TOKEN")
-TOKEN = "5684748227:AAEKsdSo2-TNAacjC-vy_xS01ckyFlkvjos"
+TOKEN = env.str("TOKEN")
 LANGUAGE = EN
 
 stance_target = None

@@ -10,7 +10,7 @@ import time
 import requests, json
 import pyimgur
 from serpapi import GoogleSearch
-
+from lan import Language, EN, FA
 # Environment Variables
 env = Env()  # new
 env.read_env()  # read .env file, if it exists
@@ -20,31 +20,46 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = env.str("TOKEN")
+# TOKEN = env.str("TOKEN")
+TOKEN = "5684748227:AAEKsdSo2-TNAacjC-vy_xS01ckyFlkvjos"
+LANGUAGE = EN
 
 stance_target = None
 stance_text = None
 user_state = {}
-stance = "Stance Detection"
-text = "Search Text"
-image = "Search Image"
+
+stance = LANGUAGE.STANCE
+text = LANGUAGE.TEXT
+image = LANGUAGE.IMAGE
+language = LANGUAGE.BOT_LANGUAGE
 button_list = [stance, text, image]
 client_id = "9345c5d096864df"
 last_message = []
 
+def assign_global_value():
+    global stance, text, image, language, button_list
+    stance = LANGUAGE.STANCE
+    text = LANGUAGE.TEXT
+    image = LANGUAGE.IMAGE
+    language = LANGUAGE.BOT_LANGUAGE
+    button_list = [stance, text, image]
+
 def start(update: Update, context: CallbackContext):
     if len(last_message) != 0:
         context.bot.delete_message(chat_id=update.effective_chat.id, message_id=last_message[0].message_id)
-    buttons = [[KeyboardButton(stance)], [KeyboardButton(text)], [KeyboardButton(image)]]
+    buttons = [[KeyboardButton(stance)], [KeyboardButton(text)], [KeyboardButton(image)], [KeyboardButton(language)]]
     
     last_message[0] = context.bot.send_message(chat_id=update.effective_chat.id,
-                             reply_markup=ReplyKeyboardMarkup(buttons), text="Welcome to my bot!\nTODO: Write something to describe out bot functionality.")
+                             reply_markup=ReplyKeyboardMarkup(buttons), text=LANGUAGE.WELCOME)
 
 
-def help(update, context):
-    text = "The purpose of this bot is to check the truthness of the combination of a text and an image from social media, thus it takes a text and an image as inputs, then it passes this inputs to our fact checking model. The output of this bot is a percentage that indicates the possibility that this corresponding news is fake."
+def about(update, context):
+    text = LANGUAGE.ABOUT
     update.message.reply_text(text)
 
+def help(update, context):
+    text = LANGUAGE.HELP
+    update.message.reply_text(text)
 
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -97,9 +112,9 @@ def downloadImageDoc(update, context):
                 # context.bot.send_photo(update.message.chat.id, open(saving_path, 'rb'), 'This is your image')
                 # context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks for image")
             except:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="error")
+                context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.ERROR)
     else:
-        update.message.reply_text("please type /start first!")
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
 
 def downloadImagePhoto(update, context):
@@ -129,9 +144,9 @@ def downloadImagePhoto(update, context):
                 # context.bot.send_photo(update.message.chat.id, open(saving_path, 'rb'), 'This is your image')
                 # context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks for image")
             except:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="error")
+                context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.ERROR)
     else:
-        update.message.reply_text("please type /start first!")
+        update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
 
 def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
@@ -142,13 +157,13 @@ def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
         menu.append(footer_buttons)
     return menu
 
-def target_selection(update, context, last_message):
-    button_labels = [['Atheism'], ['Climate Change Concern'], ['Donald Trump'],\
-                     ['Feminist'], ['Hillary Clinton'], ['Legalization of Abortion']]
+def target_selection(update: Update, context: CallbackContext, last_message):
+    button_labels = [[LANGUAGE.ATHEISM], [LANGUAGE.CLIMATE_CHANGE_CONCERN], [LANGUAGE.DONALD_TRUMP],\
+                     [LANGUAGE.FEMINIST], [LANGUAGE.HILLARY_CLINTON], [LANGUAGE.LEGALIZATION_OF_ABORTION]]
     
     reply_keyboard = ReplyKeyboardMarkup(button_labels)
     context.bot.send_chat_action(chat_id=update.effective_user.id, action=ChatAction.TYPING)
-    context.bot.send_message(chat_id=update.message.chat_id,text='please choose a target!',reply_markup=reply_keyboard)
+    context.bot.send_message(chat_id=update.message.chat_id,text=LANGUAGE.TARGET_SELECTION, reply_markup=reply_keyboard)
 
 def api_pipline(update, context, stage="stage0"):
     user_id = update.message.chat.id
@@ -159,21 +174,19 @@ def api_pipline(update, context, stage="stage0"):
         target_selection(update, context, last_message)
     elif stage == "stage1":
         user_state[user_id]["target"] = update.message.text
-        update.message.reply_text("please enter a text!")
+        update.message.reply_text(LANGUAGE.SEND_TEXT)
     elif stage == "stage2":
         user_state[user_id]["text"] = update.message.text
         result = api_test(user_state[user_id]["target"], user_state[user_id]["text"])
         
-        reply_msg = f'Target : {user_state[user_id]["target"]}\
-                    \n\nText : {user_state[user_id]["text"]}\
-                    \n\nOur Stance Prediction : {result}'
+        reply_msg = LANGUAGE.INSTANCE_DETECTION_RESULT(user_state[user_id]["target"], user_state[user_id]["text"], result)
         update.message.reply_text(reply_msg)
 
         buttons = [[InlineKeyboardButton("👍", callback_data="like")],
                    [InlineKeyboardButton("👎", callback_data="dislike")]]
         context.bot.send_message(chat_id=update.effective_chat.id, 
                                  reply_markup=InlineKeyboardMarkup(buttons),
-                                 text="Do you agree with our prediction?")
+                                 text=LANGUAGE.AGREE_WITH_PREDICTION)
 
 
 def api_test(stance_target, stance_text):
@@ -199,6 +212,23 @@ def api_test(stance_target, stance_text):
     # print("time taken:", t2 - t1)
     return result
 
+def pending_stance_detection(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
+    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+    user_state[user_id]["role"] = "stance_detection"
+    api_pipline(update, context, "stage0")
+
+def pending_search_text(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
+    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+    user_state[user_id]["role"] = "text"
+    update.message.reply_text(LANGUAGE.SEND_TEXT)
+
+def pending_search_image(update: Update, context: CallbackContext):
+    user_id = update.message.chat.id
+    user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
+    user_state[user_id]["role"] = "image"
+    update.message.reply_text(LANGUAGE.SEND_IMAGE)
 
 def text_message(update, context):
     user_id = update.message.chat.id
@@ -211,16 +241,13 @@ def text_message(update, context):
         button_list = [stance, text, image]
         user_state[user_id] = {"role" : None, "state" : None, "target" : None, "text" : None}
         if stance in update.message.text:
-            user_state[user_id]["role"] = "stance_detection"
-            api_pipline(update, context, "stage0")
+            pending_stance_detection(update, context)
         elif text == update.message.text:
-            user_state[user_id]["role"] = "text"
-            update.message.reply_text("Now you can send your text.")
+            pending_search_text(update, context)
         elif image in update.message.text:
-            user_state[user_id]["role"] = "image"
-            update.message.reply_text("Now you can send your image.")
+            pending_search_image(update, context)
         else:
-            update.message.reply_text("please type /start first!")
+            update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
     else:
         print("else")
@@ -235,28 +262,63 @@ def text_message(update, context):
             elif user_state[user_id]["state"] == "stage2":
                 api_pipline(update, context, "stage2")
                 user_state[user_id]["role"] = None
-                buttons = [[KeyboardButton(stance)], [KeyboardButton(text)], [KeyboardButton(image)]]
+                buttons = [[KeyboardButton(stance)], [KeyboardButton(text)], [KeyboardButton(image)], [KeyboardButton(language)]]
     
                 last_message[0] = context.bot.send_message(chat_id=update.effective_chat.id,
-                                        reply_markup=ReplyKeyboardMarkup(buttons), text="Try out other functionality!")
+                                        reply_markup=ReplyKeyboardMarkup(buttons), text=LANGUAGE.TRY_OTHER_FUNCTIONALITY)
             else:
                 api_pipline(update, context, "stage0")
                 user_state[user_id].append("stage1")
 
+def bot_language(update: Update, context: CallbackContext):
+    buttons = [[InlineKeyboardButton(LANGUAGE.FARSI, callback_data='farsi')], [InlineKeyboardButton(LANGUAGE.ENGLISH, callback_data='english')]]
+    context.bot.send_message(chat_id=update._effective_chat.id, text=LANGUAGE.CHOOSE_LANGUAGE, reply_markup=InlineKeyboardMarkup(buttons, resize_keyboard=True))
+
+def change_language(update: Update, context: CallbackContext):
+    global LANGUAGE
+    callback_data = update.callback_query.data
+    if 'farsi' in callback_data or 'english' in callback_data:
+        LANGUAGE = Language.LANGUAGE_SELECTOR[callback_data]
+        assign_global_value()
+        start(update, context)
+
+
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
+
+    start_command = BotCommand('start', 'Start the bot')
+    #stop_command = ...
+    # help_command = BotCommand('help', 'Show bot commands')
+    about_command = BotCommand('about', 'Summary of the purpose of the bot')
+    language_command = BotCommand('bot_language', 'Change the language of the bot')
+    stance_command = BotCommand('stance', 'Stance Detection')
+    image_command = BotCommand('image_search', 'Search Image')
+    text_command = BotCommand('text_search', 'Search Text')
+    bot_commands = [start_command, about_command, language_command,\
+            stance_command, image_command, text_command,\
+                # stop_command, help_command, 
+                ]
+    dp.bot.set_my_commands(bot_commands)
+
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
+    # dp.add_handler(CommandHandler("stop", stop))
+    # dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("about", about))
+    dp.add_handler(CommandHandler("stance", pending_stance_detection))
+    dp.add_handler(CommandHandler('bot_language', bot_language))
+    dp.add_handler(CommandHandler('text_search', pending_search_text))
+    dp.add_handler(CommandHandler('image_search', pending_search_image))
 
-    dp.add_handler(CommandHandler("targets", target_selection))
-
+    dp.add_handler(MessageHandler(Filters.text(Language.BOT_LANGUAGE), bot_language))
     dp.add_handler(MessageHandler(Filters.text, text_message))
-
     dp.add_handler(MessageHandler(Filters.document, downloadImageDoc))
     dp.add_handler(MessageHandler(Filters.photo, downloadImagePhoto))
 
+    dp.add_handler(CallbackQueryHandler(change_language, pattern='^(farsi|english|فارسی|انگلیسی)$'))
+
     dp.add_error_handler(error)
+
 
     updater.start_polling()
     updater.idle()
@@ -264,4 +326,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    

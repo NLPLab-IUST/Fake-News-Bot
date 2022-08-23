@@ -23,6 +23,9 @@ class EN:
     HILLARY_CLINTON = "Hillary Clinton"
     LEGALIZATION_OF_ABORTION = "Legalization of Abortion"
     TARGET_SELECTION = "please choose a target!"
+    WRONG_TARGET = "please choose your target from below list"
+    POSITIVE_FEEDBACK = "Yes 👍"
+    NEGATIVE_FEEDBACK = "No 👎"
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'Target : {target}\
@@ -61,6 +64,9 @@ class FA:
     HILLARY_CLINTON = "هیلاری کلینتون"
     LEGALIZATION_OF_ABORTION = "قانونی شدن سقط جنین"
     TARGET_SELECTION = "لطفا یک عنوان را انتخاب کنید!"
+    WRONG_TARGET = "لطفا موضوع خود را از بین موضوع های لیست زیر انتخاب کنید"
+    POSITIVE_FEEDBACK = "بله 👍"
+    NEGATIVE_FEEDBACK = "خیر 👎"
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'نمونه : {target}\
@@ -87,3 +93,5 @@ class Language:
         ENGLAND_EN: EN, ENGLAND_FA: EN
     }
     BOT_LANGUAGE = [EN.BOT_LANGUAGE, FA.BOT_LANGUAGE]
+    POSITIVE_FEEDBACKS = [EN.POSITIVE_FEEDBACK, FA.POSITIVE_FEEDBACK]
+    NEGATIVE_FEEDBACKS = [EN.NEGATIVE_FEEDBACK, FA.NEGATIVE_FEEDBACK]

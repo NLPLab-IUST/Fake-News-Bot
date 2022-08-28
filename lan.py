@@ -14,7 +14,7 @@ class EN:
     /image_search: The first 5 searched links related to the sent image
     '''
     ERROR = "error"
-    UKNOWN_COMMAND = "🔴 Uknown command!"
+    UNKNOWN_COMMAND = "🔴 Unknown command!"
     TYPE_START_FIRST = "please type /start first!"
     ATHEISM = "Atheism"
     CLIMATE_CHANGE_CONCERN = "Climate Change Concern"
@@ -26,6 +26,7 @@ class EN:
     WRONG_TARGET = "please choose your target from below list"
     POSITIVE_FEEDBACK = "Yes 👍"
     NEGATIVE_FEEDBACK = "No 👎"
+    WRONG_FORMAT = "the format of input is incorrect❗"
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'Target : {target}\
@@ -67,6 +68,7 @@ class FA:
     WRONG_TARGET = "لطفا موضوع خود را از بین موضوع های لیست زیر انتخاب کنید"
     POSITIVE_FEEDBACK = "بله 👍"
     NEGATIVE_FEEDBACK = "خیر 👎"
+    WRONG_FORMAT = "فرمت پیام ارسالی اشتباه است❗"
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'نمونه : {target}\

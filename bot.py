@@ -148,7 +148,7 @@ def like_feedback(update: Update, context: CallbackContext):
         last_message[0] = context.bot.send_message(chat_id=update.effective_chat.id,
                                 reply_markup=ReplyKeyboardMarkup(buttons), text=LANGUAGE.TRY_OTHER_FUNCTIONALITY)
     else:
-        update.message.reply_text(LANGUAGE.UKNOWN_COMMAND)
+        update.message.reply_text(LANGUAGE.UNKNOWN_COMMAND)
 
 
 def dislike_feedback(update: Update, context: CallbackContext):
@@ -162,7 +162,7 @@ def dislike_feedback(update: Update, context: CallbackContext):
         last_message[0] = context.bot.send_message(chat_id=update.effective_chat.id,
                                 reply_markup=ReplyKeyboardMarkup(buttons), text=LANGUAGE.TRY_OTHER_FUNCTIONALITY)
     else:
-        update.message.reply_text(LANGUAGE.UKNOWN_COMMAND)
+        update.message.reply_text(LANGUAGE.UNKNOWN_COMMAND)
 
 
 def print_website_names(update, context):
@@ -186,7 +186,7 @@ def image_search_google(url):
     return results['image_results'][:5]
 
 
-def downloadImageDoc(update, context):
+def downloadImageDoc(update: Update, context: CallbackContext):
     user_id = update.message.chat.id
     if user_id in user_state:
         if user_state[user_id]["role"] == "image":
@@ -215,6 +215,8 @@ def downloadImageDoc(update, context):
                 # context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks for image")
             except:
                 context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.ERROR)
+        else:
+            update.message.reply_text(LANGUAGE.WRONG_FORMAT)
     else:
         update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
@@ -247,6 +249,8 @@ def downloadImagePhoto(update, context):
                 # context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks for image")
             except:
                 context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.ERROR)
+        else:
+            update.message.reply_text(LANGUAGE.WRONG_FORMAT)
     else:
         update.message.reply_text(LANGUAGE.TYPE_START_FIRST)
 
@@ -317,7 +321,7 @@ def text_message(update, context):
         elif image in update.message.text:
             pending_search_image(update, context)
         else:
-            update.message.reply_text(LANGUAGE.UKNOWN_COMMAND)
+            update.message.reply_text(LANGUAGE.UNKNOWN_COMMAND)
 
     else:
         print("else")
@@ -334,6 +338,8 @@ def text_message(update, context):
             else:
                 api_pipline(update, context, "stage0")
                 user_state[user_id].append("stage1")
+        else:
+            update.message.reply_text(LANGUAGE.WRONG_FORMAT)
 
 
 

@@ -1,3 +1,4 @@
+from urllib.parse import unquote
 
 class EN:
     STANCE = "Stance Detection"
@@ -27,6 +28,19 @@ class EN:
     POSITIVE_FEEDBACK = "Yes 👍"
     NEGATIVE_FEEDBACK = "No 👎"
     WRONG_FORMAT = "the format of input is incorrect❗"
+
+    def GET_MORE_INFO(links, topic=None, titles=None):
+        result = f'Search topic: {topic}\n' if topic else ''
+        result += f'Related links:\n'
+        if titles is None:
+            titles = []
+            for link in links:
+                titles.append(unquote(link)[8::])
+        i = 0
+        for link in links:
+            result += f"\t{i+1}) <a href='{link}'>{titles[i]}</a>\n"
+            i += 1
+        return result
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'Target : {target}\
@@ -69,6 +83,19 @@ class FA:
     POSITIVE_FEEDBACK = "بله 👍"
     NEGATIVE_FEEDBACK = "خیر 👎"
     WRONG_FORMAT = "فرمت پیام ارسالی اشتباه است❗"
+
+    def GET_MORE_INFO(links, topic=None, titles=None):
+        result = f'موضوع جستجو: {topic}\n' if topic else ''
+        result += f'لینک های مرتبط:\n'
+        if titles is None:
+            titles = []
+            for link in links:
+                titles.append(unquote(link)[8::])
+        i = 0
+        for link in links:
+            result += f"\t{i+1}) <a href='{link}'>{titles[i]}</a>\n"
+            i += 1
+        return result
 
     def INSTANCE_DETECTION_RESULT(target, text, result):
         return f'نمونه : {target}\

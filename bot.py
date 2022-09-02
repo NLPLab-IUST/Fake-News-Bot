@@ -165,11 +165,13 @@ def dislike_feedback(update: Update, context: CallbackContext):
         update.message.reply_text(LANGUAGE.UNKNOWN_COMMAND)
 
 
-def print_website_names(update, context):
+def print_website_names(update: Update, context: CallbackContext):
     user_id = update.message.chat.id
     query = update.message.text
+    links = []
     for j in search(query, tld="co.in", num=5, stop=5, pause=2):
-        update.message.reply_text(j)
+        links.append(j)
+    context.bot.send_message(chat_id=user_id, text=LANGUAGE.GET_MORE_INFO(links, query), parse_mode=ParseMode.HTML)
     user_state[user_id]["role"] = None
 
 
@@ -204,10 +206,14 @@ def downloadImageDoc(update: Update, context: CallbackContext):
 
                 print("link =", uploaded_image.link)
                 result = image_search_google(uploaded_image.link)
-                
+                links = []
+                topics = []
 
                 for res in result:
-                    update.message.reply_text(res["link"])
+                    print(res["link"])
+                    links.append(res["link"])
+                    topics.append(res['title'])
+                context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.GET_MORE_INFO(links, titles=topics), parse_mode=ParseMode.HTML)
 
                 user_state[user_id]["role"] = None
 
@@ -239,9 +245,14 @@ def downloadImagePhoto(update, context):
 
                 print("link = ", uploaded_image.link)
                 result = image_search_google(uploaded_image.link)
+                links = []
+                topics = []
 
                 for res in result:
-                    update.message.reply_text(res["link"])
+                    print(res["link"])
+                    links.append(res["link"])
+                    topics.append(res['title'])
+                context.bot.send_message(chat_id=update.effective_chat.id, text=LANGUAGE.GET_MORE_INFO(links, titles=topics), parse_mode=ParseMode.HTML)
 
                 user_state[user_id]["role"] = None
 

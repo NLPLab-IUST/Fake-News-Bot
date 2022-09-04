@@ -5,9 +5,9 @@ class EN:
     TEXT = "Search Text"
     IMAGE = "Search Image"
     BOT_LANGUAGE = "Bot Language"
-    WELCOME = "Welcome to my bot!\nTODO: Write something to describe out bot functionality."
+    WELCOME = "Welcome to Stance Detection bot. \nThis bot is created by our NLPlab team in the University of science and technology. \n\nYou can also check our website to see other works of us. \nhttps://main-web.pvqa-frontend.pages.dev"
     STOP_BOT = "Thanks for using our bot\n GoodBye 👋"
-    ABOUT = "The purpose of this bot is to check the truthness of the combination of a text and an image from social media, thus it takes a text and an image as inputs, then it passes this inputs to our fact checking model. The output of this bot is a percentage that indicates the possibility that this corresponding news is fake."
+    ABOUT = "The main purpose of this bot is detecting the stance of the input text according to the chosen target. \nFirst of all, you need to choose a target. Then, you can type your desired text which you want to know about its stance. The provided AI will predict the stance of your given text."
     HELP = '''
     Functionality:\n
     /stance: The detection of the stance of the sent text in relation to the target has been determined\n
@@ -60,9 +60,9 @@ class FA:
     TEXT = "جست و جوی متن"
     IMAGE = "جست و جوی تصویر"
     BOT_LANGUAGE = "زبان بات"
-    WELCOME = "به ربات من خوش آمدید!\n TODO: چیزی برای توصیف عملکرد ربات بنویسید."
+    WELCOME = "سلام، به بات تشخیص موضع خوش آمدید. \nاین ربات تلگرامی توسط تیم NLPlab ما در دانشگاه علم و صنعت ایران ایجاد شده است. \n\nبرای دیدن سایر فعالیت های تیم ما می توانید به وب سایت NLPlab سر بزنید. \nhttps://main-web.pvqa-frontend.pages.dev"
     STOP_BOT = "تشکر بابت استفاده از بات تلگرامی ما\nخدانگهدار 👋"
-    ABOUT = "هدف این ربات بررسی صحت ترکیب یک متن و یک تصویر از رسانه های اجتماعی است، بنابراین یک متن و یک تصویر را به عنوان ورودی می گیرد، سپس این ورودی ها را به مدل بررسی واقعیت ما ارسال می کند. خروجی این ربات درصدی است که نشان دهنده احتمال جعلی بودن این خبر مربوطه است."
+    ABOUT = "هدف کلی این ربات تشخیص موضع اخبار است. \nبه این صورت که شما باید یکی از موضوعات ارائه شده را انتخاب کنید و در ادامه متنی که می خواهید موضع آن را بدانید را وارد می کنید. سپس مدل هوش مصنوعی ما، موضع متن شما را تشخیص می دهد. \n"
     HELP = '''
     کارکردها:
     /stance: تشخیص موضع متن ارسالی نسبت به موضوع تعیین شده \n

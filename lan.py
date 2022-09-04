@@ -5,9 +5,9 @@ class EN:
     TEXT = "Search Text"
     IMAGE = "Search Image"
     BOT_LANGUAGE = "Bot Language"
-    WELCOME = "Welcome to Stance Detection bot. \nThis bot is created by our NLPlab team in the University of science and technology. \n\nYou can also check our website to see other works of us. \nhttps://main-web.pvqa-frontend.pages.dev"
+    WELCOME = "Welcome to the Stance Detection bot. \nThis bot is created by our NLPlab team at the University of science and technology. \n\nYou can also check our website to see other works of ours. \nhttps://main-web.pvqa-frontend.pages.dev"
     STOP_BOT = "Thanks for using our bot\n GoodBye 👋"
-    ABOUT = "The main purpose of this bot is detecting the stance of the input text according to the chosen target. \nFirst of all, you need to choose a target. Then, you can type your desired text which you want to know about its stance. The provided AI will predict the stance of your given text."
+    ABOUT = "The main purpose of this bot is to detect the stance of the input text according to the chosen target. \nFirst of all, you need to choose a target. Then, you can type your desired text which you want to know about its stance. The provided AI will predict the stance of your given text."
     HELP = '''
     Functionality:\n
     /stance: The detection of the stance of the sent text in relation to the target has been determined\n

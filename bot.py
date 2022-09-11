@@ -330,8 +330,10 @@ def stance_model_api(stance_target, stance_text):
     # API URL
     api_url = "http://194.225.229.223:9051/"
     header = {"X-Api-Key": 'w6MCbeG3-kpiR1cZu2JoAQ'}
+    print('API call')
     # get response from API
     response = requests.post(api_url, json=API_dictionary, headers=header)
+    print('response received')
     # get json part of response
     print("response : ", response)
     result = response.json()

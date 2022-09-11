@@ -1,6 +1,7 @@
 from urllib.parse import unquote
 
 class EN:
+    NAME = "en"
     STANCE = "Stance Detection"
     TEXT = "Search Text"
     IMAGE = "Search Image"
@@ -56,6 +57,7 @@ class EN:
 
 
 class FA:
+    NAME = "fa"
     STANCE = "تشخیص موضع"
     TEXT = "جست و جوی متن"
     IMAGE = "جست و جوی تصویر"

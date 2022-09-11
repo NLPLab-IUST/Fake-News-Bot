@@ -278,7 +278,7 @@ def api_pipline(update, context, stage="stage0"):
         update.message.reply_text(LANGUAGE.SEND_TEXT)
     elif stage == "stage2":
         user_state[user_id]["text"] = update.message.text
-        result = api_test(user_state[user_id]["target"], user_state[user_id]["text"])
+        result = stance_model_api(user_state[user_id]["target"], user_state[user_id]["text"])
 
         reply_msg = LANGUAGE.INSTANCE_DETECTION_RESULT(user_state[user_id]["target"], user_state[user_id]["text"], result)
         update.message.reply_text(reply_msg)
@@ -289,27 +289,24 @@ def api_pipline(update, context, stage="stage0"):
                                  text=LANGUAGE.AGREE_WITH_PREDICTION)
 
 
-def api_test(stance_target, stance_text):
-    # TODO : change after deploy API successfully
+def stance_model_api(stance_target, stance_text):
     print(stance_text)
     print(stance_target)
-    result = 'None'
-    # API_dictionary = {
-    #     "topic": stance_text,
-    #     "tweet": stance_target}
-    
-    # # API URL
-    # api_url = "http://172.17.3.126:9100//"
-    # header = {"X-Api-Key": 'w6MCbeG3-kpiR1cZu2JoAQ'}
-    # # get response from API
-    # t1 = time.time()
-    # response = requests.post(api_url, json=API_dictionary, headers=header)
-    # # get json part of response
-    # result = response.json()
-    # t2 = time.time()
-    # print("result : ", result)
-    
-    # print("time taken:", t2 - t1)
+    API_dictionary = {
+        "topic": stance_target,
+        "tweet": stance_text,
+        "language" : LANGUAGE.NAME}
+    print(API_dictionary)
+    #API URL
+    api_url = "http://194.225.229.223:9051/"
+    header = {"X-Api-Key": 'w6MCbeG3-kpiR1cZu2JoAQ'}
+    # get response from API
+    response = requests.post(api_url, json=API_dictionary, headers=header)
+    # get json part of response
+    print("response : ", response)
+    result = response.json()
+    print(result)
+    # result : stance : favore, against, nutrual
     return result
 
 

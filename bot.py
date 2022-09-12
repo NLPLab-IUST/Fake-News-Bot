@@ -322,22 +322,23 @@ def api_pipline(update, context, stage="stage0"):
 def stance_model_api(stance_target, stance_text):
     print(stance_text)
     print(stance_target)
+    result = 'Favore'
     API_dictionary = {
         "topic": stance_target,
         "tweet": stance_text,
         "language": LANGUAGE.NAME}
     print(API_dictionary)
     # API URL
-    api_url = "http://194.225.229.223:9051/"
-    header = {"X-Api-Key": 'w6MCbeG3-kpiR1cZu2JoAQ'}
-    print('API call')
-    # get response from API
-    response = requests.post(api_url, json=API_dictionary, headers=header)
-    print('response received')
-    # get json part of response
-    print("response : ", response)
-    result = response.json()
-    print(result)
+#     api_url = "http://194.225.229.223:9051/"
+#     header = {"X-Api-Key": 'w6MCbeG3-kpiR1cZu2JoAQ'}
+#     print('API call')
+#     # get response from API
+#     response = requests.post(api_url, json=API_dictionary, headers=header)
+#     print('response received')
+#     # get json part of response
+#     print("response : ", response)
+#     result = response.json()
+#     print(result)
     # result : stance : favore, against, nutrual
     return result
 

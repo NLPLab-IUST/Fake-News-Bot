@@ -6,7 +6,7 @@ class EN:
     TEXT = "Search Text"
     IMAGE = "Search Image"
     BOT_LANGUAGE = "Bot Language"
-    WELCOME = "Welcome to the Stance Detection bot. \nThis bot is created by our NLPlab team at the University of science and technology. \n\nYou can also check our website to see other works of ours. \nhttps://main-web.pvqa-frontend.pages.dev"
+    WELCOME = "Welcome to the Stance Detection bot. \nThis bot is created by our NLPlab team at the University of science and technology. \n\nYou can also check our website to see other works of ours. \nhttp://nlplab.iust.ac.ir/"
     STOP_BOT = "Thanks for using our bot\n GoodBye 👋"
     ABOUT = "The main purpose of this bot is to detect the stance of the input text according to the chosen target. \nFirst of all, you need to choose a target. Then, you can type your desired text which you want to know about its stance. The provided AI will predict the stance of your given text."
     HELP = '''
@@ -62,7 +62,7 @@ class FA:
     TEXT = "جست و جوی متن"
     IMAGE = "جست و جوی تصویر"
     BOT_LANGUAGE = "زبان بات"
-    WELCOME = "سلام، به بات تشخیص موضع خوش آمدید. \nاین ربات تلگرامی توسط تیم NLPlab ما در دانشگاه علم و صنعت ایران ایجاد شده است. \n\nبرای دیدن سایر فعالیت های تیم ما می توانید به وب سایت NLPlab سر بزنید. \nhttps://main-web.pvqa-frontend.pages.dev"
+    WELCOME = "سلام، به بات تشخیص موضع خوش آمدید. \nاین ربات تلگرامی توسط تیم NLPlab ما در دانشگاه علم و صنعت ایران ایجاد شده است. \n\nبرای دیدن سایر فعالیت های تیم ما می توانید به وب سایت NLPlab سر بزنید. \nhttp://nlplab.iust.ac.ir/"
     STOP_BOT = "تشکر بابت استفاده از بات تلگرامی ما\nخدانگهدار 👋"
     ABOUT = "هدف کلی این ربات تشخیص موضع اخبار است. \nبه این صورت که شما باید یکی از موضوعات ارائه شده را انتخاب کنید و در ادامه متنی که می خواهید موضع آن را بدانید را وارد می کنید. سپس مدل هوش مصنوعی ما، موضع متن شما را تشخیص می دهد. \n"
     HELP = '''
